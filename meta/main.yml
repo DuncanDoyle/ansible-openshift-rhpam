@@ -1,0 +1,21 @@
+galaxy_info:
+  author: Duncan Doyle
+  description: Red Hat Process Automation Manager
+  company: Red Hat
+  license: license (Apache)
+  min_ansible_version: 2.4
+  platforms:
+   - name: Linux
+     versions:
+     - all
+
+  galaxy_tags:
+     - rhpam
+     - redhat
+     - process
+     - automation
+     - jbpm
+     - bpm
+     - workflow
+
+dependencies: []

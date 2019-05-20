@@ -1,0 +1,75 @@
+---
+# deploy rhamt web console on OpenShift
+- debug:
+    msg:
+      - Openshift project
+      - -> Check if {{ OCP_PROJECT }} project exists
+
+- name: check if {{ OCP_PROJECT }} project exists
+  shell: "oc get project {{ OCP_PROJECT }}"
+  register: labs_infra_project_result
+  ignore_errors: true
+  changed_when: false
+
+- debug:
+    msg:
+      - Openshift project
+      - -> Create Openshift project ({{ OCP_PROJECT }})
+
+- name: create {{ OCP_PROJECT }} project
+  shell: |
+         oc new-project {{OCP_PROJECT}} \
+            --display-name="RHPAM 7 Order IT Hardware Demo" \
+            --description="Red Hat Process Automation Manager 7 Order IT Hardware Demo"
+  when: labs_infra_project_result is failed
+
+- debug:
+    msg:  -> Process RHPAM Authoring Template
+
+# Check whether the required ImageStreams are available in the "openshift" namespace.
+# If they are not, we import them.
+# We need to do this in the "openshift" namespace, in order to have the secret to pull from registry.redhat.io.
+- name: Check if PAM ImageStreams exists
+  shell: oc get is/rhpam73-businesscentral-openshift -n openshift
+  register: rhpam_is_exists_result
+  ignore_errors: true
+
+- name: Import the RHPAM73 ImageStreams into the cluster.
+  shell: "oc create -f {{pam_imagestreams_yml}} -n openshift"
+  when: rhpam_is_exists_result is failed
+  ignore_errors: true
+
+ name: Create Secrets Business Central
+  shell: oc process -f {{pam_secrets_template_yml}} -p SECRET_NAME=businesscentral-app-secret | oc create -f - -n {{OCP_PROJECT}}
+
+- name: Create Secrets KIE-server
+  shell: oc process -f {{pam_secrets_template_yml}} -p SECRET_NAME=kieserver-app-secret | oc create -f - -n {{OCP_PROJECT}}
+
+- name: Create Service Account Business Central
+  shell: oc create serviceaccount businesscentral-service-account -n {{OCP_PROJECT}}
+
+- name: Create Service Account KIE Server
+  shell: oc create serviceaccount kieserver-service-account -n {{OCP_PROJECT}}
+
+- name: Link secrets and service account Business Central
+  shell: oc secrets link --for=mount businesscentral-service-account businesscentral-app-secret -n {{OCP_PROJECT}}
+
+- name: Link secrets and service account KIE-server
+  shell: oc secrets link --for=mount kieserver-service-account kieserver-app-secret -n {{OCP_PROJECT}}
+
+- name: Create PAM7 Authoring environment
+  shell: |
+          oc new-app --template=rhpam73-authoring \
+            -p APPLICATION_NAME="rhpam7-oih" \
+            -p KIE_ADMIN_USER="adminUser" \
+            -p KIE_ADMIN_PWD="test1234!" \
+            -p KIE_SERVER_CONTROLLER_USER="controllerUser" \
+            -p KIE_SERVER_CONTROLLER_PWD="test1234!" \
+            -p KIE_SERVER_USER="executionUser" \
+            -p KIE_SERVER_PWD="test1234!" \
+            -p BUSINESS_CENTRAL_HTTPS_SECRET="businesscentral-app-secret" \
+            -p KIE_SERVER_HTTPS_SECRET="kieserver-app-secret" \
+            -p BUSINESS_CENTRAL_MAVEN_USERNAME="mavenUser" \
+            -p BUSINESS_CENTRAL_MAVEN_PASSWORD="test1234!" \
+            -p BUSINESS_CENTRAL_MEMORY_LIMIT="2Gi" \
+            -p IMAGE_STREAM_NAMESPACE=openshift -n {{OCP_PROJECT}}

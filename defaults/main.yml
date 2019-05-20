@@ -1,0 +1,10 @@
+---
+# defaults file for redhat_migration_toolkit
+#OCP_PROJECT: labs-infra
+OCP_PROJECT: rhpam
+#REQUESTED_CPU_BC: 2
+#REQUESTED_MEMORY_BC: 4Gi
+#REQUESTED_CPU_KS: 1
+#REQUESTED_MEMORY_KS: 2Gi
+
+RHPAM_VERSION_TAG: 7.3.0.GA
