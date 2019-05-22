@@ -17,7 +17,7 @@ OpenShift Version Compatibility
 When listing this role in `requirements.yml`, make sure to pin the version of the role via one of the tags:
 
 ```
-- src: DuncanDoyle.rhpam
+- src: duncandoyle.ansible_openshift_rhpam
   version: 0.0.1
 ```  
 
@@ -39,7 +39,7 @@ name: Example Playbook
 hosts: localhost
 tasks:
 - import_role:
-    name: DuncanDoyle.rhpam
+    name: duncandoyle.ansible_openshift_rhpam
   vars:
     OCP_PROJECT: "rhpam"
 ```
