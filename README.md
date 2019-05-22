@@ -9,7 +9,7 @@ Role Variables
 | Variable                    | Default Value      | Required |  Description   |
 |-----------------------------|--------------------|----------|----------------|
 |`OCP_PROJECT`                | `rhpam`            | Required | OpenShift project name in which to provision this role |
-|`DOCKER_IMAGES_TAG`          | `7.3.0.GA`      | Optional | RHPAM container image tag in registry.redhat.io |
+|`RHPAM_VERSION_TAG`          | `7.3.0.GA`      | Optional | RHPAM container image tag in registry.redhat.io. I.e. the RHPAM version to deploy. |
 
 OpenShift Version Compatibility
 ------------
