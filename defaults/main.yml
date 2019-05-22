@@ -8,3 +8,4 @@ OCP_PROJECT: rhpam
 #REQUESTED_MEMORY_KS: 2Gi
 
 RHPAM_VERSION_TAG: 7.3.0.GA
+PAM_SECRETS_TEMPLATE_YML: https://github.com/jboss-container-images/rhpam-7-openshift-image/blob/{{ RHPAM_VERSION_TAG }}/example-app-secret-template.yaml

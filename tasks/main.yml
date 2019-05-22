@@ -19,8 +19,8 @@
 - name: create {{ OCP_PROJECT }} project
   shell: |
          oc new-project {{OCP_PROJECT}} \
-            --display-name="RHPAM 7 Order IT Hardware Demo" \
-            --description="Red Hat Process Automation Manager 7 Order IT Hardware Demo"
+            --display-name="RHPAM 7" \
+            --description="Red Hat Process Automation Manager 7"
   when: labs_infra_project_result is failed
 
 - debug:
@@ -31,19 +31,19 @@
 # We need to do this in the "openshift" namespace, in order to have the secret to pull from registry.redhat.io.
 - name: Check if PAM ImageStreams exists
   shell: oc get is/rhpam73-businesscentral-openshift -n openshift
-  register: rhpam_is_exists_result
-  ignore_errors: true
+#  register: rhpam_is_exists_result
+#  ignore_errors: true
 
-- name: Import the RHPAM73 ImageStreams into the cluster.
-  shell: "oc create -f {{pam_imagestreams_yml}} -n openshift"
-  when: rhpam_is_exists_result is failed
-  ignore_errors: true
+#- name: Import the RHPAM73 ImageStreams into the cluster.
+#  shell: "oc create -f {{pam_imagestreams_yml}} -n openshift"
+#  when: rhpam_is_exists_result is failed
+#  ignore_errors: true
 
- name: Create Secrets Business Central
-  shell: oc process -f {{pam_secrets_template_yml}} -p SECRET_NAME=businesscentral-app-secret | oc create -f - -n {{OCP_PROJECT}}
+- name: Create Secrets Business Central
+  shell: oc process -f {{PAM_SECRETS_TEMPLATE_YML}} -p SECRET_NAME=businesscentral-app-secret | oc create -f - -n {{OCP_PROJECT}}
 
 - name: Create Secrets KIE-server
-  shell: oc process -f {{pam_secrets_template_yml}} -p SECRET_NAME=kieserver-app-secret | oc create -f - -n {{OCP_PROJECT}}
+  shell: oc process -f {{PAM_SECRETS_TEMPLATE_YML}} -p SECRET_NAME=kieserver-app-secret | oc create -f - -n {{OCP_PROJECT}}
 
 - name: Create Service Account Business Central
   shell: oc create serviceaccount businesscentral-service-account -n {{OCP_PROJECT}}
@@ -60,9 +60,9 @@
 - name: Create PAM7 Authoring environment
   shell: |
           oc new-app --template=rhpam73-authoring \
-            -p APPLICATION_NAME="rhpam7-oih" \
-            -p KIE_ADMIN_USER="adminUser" \
-            -p KIE_ADMIN_PWD="test1234!" \
+            -p APPLICATION_NAME="rhpam7" \
+            -p KIE_ADMIN_USER="pamAdmin" \
+            -p KIE_ADMIN_PWD="redhatpam1!" \
             -p KIE_SERVER_CONTROLLER_USER="controllerUser" \
             -p KIE_SERVER_CONTROLLER_PWD="test1234!" \
             -p KIE_SERVER_USER="executionUser" \
