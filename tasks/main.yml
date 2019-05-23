@@ -51,7 +51,7 @@
 
 
 - name: Check Secrets KIE-Server
-  shell: "oc get secret/businesscentral-app-secret -n {{ OCP_PROJECT }}"
+  shell: "oc get secret/kieserver-app-secret -n {{ OCP_PROJECT }}"
   register: ks_secret_result
   ignore_errors: true
   changed_when: false
