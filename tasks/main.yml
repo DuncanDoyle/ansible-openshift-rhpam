@@ -87,7 +87,7 @@
   shell: oc secrets link --for=mount kieserver-service-account kieserver-app-secret -n {{OCP_PROJECT}}
 
 - name: check if RHPAM exists
-  shell: "oc oc get dc/rhpam7-rhpamcentr -n {{OCP_PROJECT}}"
+  shell: "oc get dc/rhpam7-rhpamcentr -n {{OCP_PROJECT}}"
   register: rhpam_result
   ignore_errors: true
   changed_when: false
