@@ -26,19 +26,6 @@
 - debug:
     msg:  -> Process RHPAM Authoring Template
 
-# Check whether the required ImageStreams are available in the "openshift" namespace.
-# If they are not, we import them.
-# We need to do this in the "openshift" namespace, in order to have the secret to pull from registry.redhat.io.
-#- name: Check if PAM ImageStreams exists
-#  shell: oc get is/rhpam73-businesscentral-openshift -n openshift
-#  register: rhpam_is_exists_result
-#  ignore_errors: true
-
-#- name: Import the RHPAM73 ImageStreams into the cluster.
-#  shell: "oc create -f {{pam_imagestreams_yml}} -n openshift"
-#  when: rhpam_is_exists_result is failed
-#  ignore_errors: true
-
 - name: Check Secrets Business Central
   shell: "oc get secret/businesscentral-app-secret -n {{ OCP_PROJECT }}"
   register: bc_secret_result

@@ -2,10 +2,5 @@
 # defaults file for redhat_migration_toolkit
 #OCP_PROJECT: labs-infra
 OCP_PROJECT: rhpam
-#REQUESTED_CPU_BC: 2
-#REQUESTED_MEMORY_BC: 4Gi
-#REQUESTED_CPU_KS: 1
-#REQUESTED_MEMORY_KS: 2Gi
-
-RHPAM_VERSION_TAG: 7.3.0.GA
+RHPAM_VERSION_TAG: 7.3.1.GA
 PAM_SECRETS_TEMPLATE_YML: https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/{{ RHPAM_VERSION_TAG }}/example-app-secret-template.yaml

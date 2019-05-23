@@ -1,7 +1,9 @@
 Ansible Role:Red Hat Process Automation Manager on OpenShift
 =========
 
-This role Red Hat Process Automation Manager on OpenShift.
+This role deploys Red Hat Process Automation Manager (the RHPAM-Authoring environment) on OpenShift.
+
+Note that this role expects both the RHPAM ImageStreams and RHPAM Authoring template to be available in the `openshift` namespace.
 
 Role Variables
 ------------
@@ -18,7 +20,7 @@ When listing this role in `requirements.yml`, make sure to pin the version of th
 
 ```
 - src: duncandoyle.ansible_openshift_rhpam
-  version: 0.0.1
+  version: 0.0.2
 ```  
 
 The following tables shows the version combinations that are tested and verified:
