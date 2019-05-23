@@ -29,8 +29,8 @@
 # Check whether the required ImageStreams are available in the "openshift" namespace.
 # If they are not, we import them.
 # We need to do this in the "openshift" namespace, in order to have the secret to pull from registry.redhat.io.
-- name: Check if PAM ImageStreams exists
-  shell: oc get is/rhpam73-businesscentral-openshift -n openshift
+#- name: Check if PAM ImageStreams exists
+#  shell: oc get is/rhpam73-businesscentral-openshift -n openshift
 #  register: rhpam_is_exists_result
 #  ignore_errors: true
 
@@ -39,23 +39,58 @@
 #  when: rhpam_is_exists_result is failed
 #  ignore_errors: true
 
+- name: Check Secrets Business Central
+  shell: "oc get secret/businesscentral-app-secret -n {{ OCP_PROJECT }}"
+  register: bc_secret_result
+  ignore_errors: true
+  changed_when: false
+
 - name: Create Secrets Business Central
   shell: oc process -f {{PAM_SECRETS_TEMPLATE_YML}} -p SECRET_NAME=businesscentral-app-secret | oc create -f - -n {{OCP_PROJECT}}
+  when: bc_secret_result is failed
+
+
+- name: Check Secrets KIE-Server
+  shell: "oc get secret/businesscentral-app-secret -n {{ OCP_PROJECT }}"
+  register: ks_secret_result
+  ignore_errors: true
+  changed_when: false
 
 - name: Create Secrets KIE-server
   shell: oc process -f {{PAM_SECRETS_TEMPLATE_YML}} -p SECRET_NAME=kieserver-app-secret | oc create -f - -n {{OCP_PROJECT}}
+  when: ks_secret_result is failed
+
+- name: Check Service Account Business Central
+  shell: "oc get serviceaccount/businesscentral-service-account -n {{ OCP_PROJECT }}"
+  register: bc_sa_result
+  ignore_errors: true
+  changed_when: false
 
 - name: Create Service Account Business Central
   shell: oc create serviceaccount businesscentral-service-account -n {{OCP_PROJECT}}
+  when: bc_sa_result is failed
+
+- name: Check Service Account KIE_Server Central
+  shell: "oc get serviceaccount/businesscentral-service-account -n {{ OCP_PROJECT }}"
+  register: ks_sa_result
+  ignore_errors: true
+  changed_when: false
 
 - name: Create Service Account KIE Server
   shell: oc create serviceaccount kieserver-service-account -n {{OCP_PROJECT}}
+  when: ks_sa_result is failed
 
 - name: Link secrets and service account Business Central
   shell: oc secrets link --for=mount businesscentral-service-account businesscentral-app-secret -n {{OCP_PROJECT}}
 
 - name: Link secrets and service account KIE-server
   shell: oc secrets link --for=mount kieserver-service-account kieserver-app-secret -n {{OCP_PROJECT}}
+
+- name: check if RHPAM exists
+  shell: "oc oc get dc/rhpam7-rhpamcentr -n {{OCP_PROJECT}}"
+  register: rhpam_result
+  ignore_errors: true
+  changed_when: false
 
 - name: Create PAM7 Authoring environment
   shell: |
@@ -73,3 +108,4 @@
             -p BUSINESS_CENTRAL_MAVEN_PASSWORD="test1234!" \
             -p BUSINESS_CENTRAL_MEMORY_LIMIT="2Gi" \
             -p IMAGE_STREAM_NAMESPACE=openshift -n {{OCP_PROJECT}}
+  when: rhpam_result is failed
