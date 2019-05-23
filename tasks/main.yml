@@ -70,8 +70,8 @@
   shell: oc create serviceaccount businesscentral-service-account -n {{OCP_PROJECT}}
   when: bc_sa_result is failed
 
-- name: Check Service Account KIE_Server Central
-  shell: "oc get serviceaccount/businesscentral-service-account -n {{ OCP_PROJECT }}"
+- name: Check Service Account KIE_Server
+  shell: "oc get serviceaccount/kieserver-service-account -n {{ OCP_PROJECT }}"
   register: ks_sa_result
   ignore_errors: true
   changed_when: false
