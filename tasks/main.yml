@@ -18,7 +18,7 @@
 
 - name: create {{ OCP_PROJECT }} project
   shell: |
-         oc new-project {{OCP_PROJECT}} \
+         oc new-project {{ OCP_PROJECT }} \
             --display-name="RHPAM 7" \
             --description="Red Hat Process Automation Manager 7"
   when: labs_infra_project_result is failed
@@ -33,7 +33,7 @@
   changed_when: false
 
 - name: Create Secrets Business Central
-  shell: oc process -f {{PAM_SECRETS_TEMPLATE_YML}} -p SECRET_NAME=businesscentral-app-secret | oc create -f - -n {{OCP_PROJECT}}
+  shell: oc process -f {{ PAM_SECRETS_TEMPLATE_YML }} -p SECRET_NAME=businesscentral-app-secret | oc create -f - -n {{ OCP_PROJECT }}
   when: bc_secret_result is failed
 
 
@@ -44,7 +44,7 @@
   changed_when: false
 
 - name: Create Secrets KIE-server
-  shell: oc process -f {{PAM_SECRETS_TEMPLATE_YML}} -p SECRET_NAME=kieserver-app-secret | oc create -f - -n {{OCP_PROJECT}}
+  shell: oc process -f {{ PAM_SECRETS_TEMPLATE_YML }} -p SECRET_NAME=kieserver-app-secret | oc create -f - -n {{ OCP_PROJECT }}
   when: ks_secret_result is failed
 
 - name: Check Service Account Business Central
@@ -54,7 +54,7 @@
   changed_when: false
 
 - name: Create Service Account Business Central
-  shell: oc create serviceaccount businesscentral-service-account -n {{OCP_PROJECT}}
+  shell: oc create serviceaccount businesscentral-service-account -n {{ OCP_PROJECT }}
   when: bc_sa_result is failed
 
 - name: Check Service Account KIE_Server
@@ -64,24 +64,24 @@
   changed_when: false
 
 - name: Create Service Account KIE Server
-  shell: oc create serviceaccount kieserver-service-account -n {{OCP_PROJECT}}
+  shell: oc create serviceaccount kieserver-service-account -n {{ OCP_PROJECT }}
   when: ks_sa_result is failed
 
 - name: Link secrets and service account Business Central
-  shell: oc secrets link --for=mount businesscentral-service-account businesscentral-app-secret -n {{OCP_PROJECT}}
+  shell: oc secrets link --for=mount businesscentral-service-account businesscentral-app-secret -n {{ OCP_PROJECT }}
 
 - name: Link secrets and service account KIE-server
-  shell: oc secrets link --for=mount kieserver-service-account kieserver-app-secret -n {{OCP_PROJECT}}
+  shell: oc secrets link --for=mount kieserver-service-account kieserver-app-secret -n {{ OCP_PROJECT }}
 
 - name: check if RHPAM exists
-  shell: "oc get dc/rhpam7-rhpamcentr -n {{OCP_PROJECT}}"
+  shell: "oc get dc/rhpam7-rhpamcentr -n {{ OCP_PROJECT }}"
   register: rhpam_result
   ignore_errors: true
   changed_when: false
 
 - name: Create PAM7 Authoring environment
   shell: |
-          oc new-app --template=rhpam{{RHPAM_VERSION_ID}}-authoring \
+          oc new-app --template=rhpam{{ RHPAM_VERSION_ID }}-authoring \
             -p APPLICATION_NAME="rhpam7" \
             -p KIE_ADMIN_USER="pamAdmin" \
             -p KIE_ADMIN_PWD="redhatpam1!" \
@@ -94,5 +94,5 @@
             -p BUSINESS_CENTRAL_MAVEN_USERNAME="mavenUser" \
             -p BUSINESS_CENTRAL_MAVEN_PASSWORD="test1234!" \
             -p BUSINESS_CENTRAL_MEMORY_LIMIT="2Gi" \
-            -p IMAGE_STREAM_NAMESPACE=openshift -n {{OCP_PROJECT}}
+            -p IMAGE_STREAM_NAMESPACE=openshift -n {{ OCP_PROJECT }}
   when: rhpam_result is failed
