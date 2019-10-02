@@ -81,7 +81,7 @@
 
 - name: Create PAM7 Authoring environment
   shell: |
-          oc new-app --template=rhpam73-authoring \
+          oc new-app --template=rhpam{{RHPAM_VERSION_ID}}-authoring \
             -p APPLICATION_NAME="rhpam7" \
             -p KIE_ADMIN_USER="pamAdmin" \
             -p KIE_ADMIN_PWD="redhatpam1!" \
