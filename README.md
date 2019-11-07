@@ -11,7 +11,9 @@ Role Variables
 | Variable                    | Default Value      | Required |  Description   |
 |-----------------------------|--------------------|----------|----------------|
 |`OCP_PROJECT`                | `rhpam`            | Required | OpenShift project name in which to provision this role |
-|`RHPAM_VERSION_TAG`          | `7.3.0.GA`      | Optional | RHPAM container image tag in registry.redhat.io. I.e. the RHPAM version to deploy. |
+|`IMAGE_STREAM_NAMESPACE`     | `openshift`        | Optional | Namespaces in which the RHPAM ImageStreams have been installed. |
+|`RHPAM_VERSION_TAG`          | `7.5.0.GA`      | Optional | RHPAM container image tag in registry.redhat.io. I.e. the RHPAM version to deploy. |
+|`RHPAM_VERSION_ID`           | `75`      | Optional | The version id used when selecting the RHPAM-Authoring template to test. E.g. `75` for templates of version `7.3.x`, `74` for templates of version `7.4.x`, etc. |
 
 OpenShift Version Compatibility
 ------------
@@ -28,6 +30,7 @@ The following tables shows the version combinations that are tested and verified
 | Role Version      | OpenShift Version |
 |-------------------|-------------------|
 | 0.0.1   | 3.11.x  |
+| 0.0.2   | 3.11.x  |
 
 Note that if a version combination is not listed above, it does **NOT** mean that it won't work on that
 version. The above table is merely the combinations that we have verified and tested.
