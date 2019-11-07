@@ -2,6 +2,7 @@
 # defaults file for redhat_migration_toolkit
 #OCP_PROJECT: labs-infra
 OCP_PROJECT: rhpam
-RHPAM_VERSION_TAG: 7.3.1.GA
-RHPAM_VERSION_ID: 73
+IMAGE_STREAM_NAMESPACE: openshift
+RHPAM_VERSION_TAG: 7.5.0.GA
+RHPAM_VERSION_ID: 75
 PAM_SECRETS_TEMPLATE_YML: https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/{{ RHPAM_VERSION_TAG }}/example-app-secret-template.yaml
