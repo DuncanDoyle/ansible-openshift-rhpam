@@ -7,7 +7,7 @@
 
 - name: check if {{ OCP_PROJECT }} project exists
   shell: "oc get project {{ OCP_PROJECT }}"
-  register: labs_infra_project_result
+  register: ocp_project_result
   ignore_errors: true
   changed_when: false
 
@@ -21,10 +21,10 @@
          oc new-project {{ OCP_PROJECT }} \
             --display-name="RHPAM 7" \
             --description="Red Hat Process Automation Manager 7"
-  when: labs_infra_project_result is failed
+  when: ocp_project_result is failed
 
 - debug:
-    msg:  -> Process RHPAM Authoring Template
+    msg:  -> Process RHPAM Template
 
 - name: Check Secrets Business Central
   shell: "oc get secret/businesscentral-app-secret -n {{ OCP_PROJECT }}"
@@ -79,9 +79,9 @@
   ignore_errors: true
   changed_when: false
 
-- name: Create PAM7 Authoring environment
+- name: Create PAM7 environment
   shell: |
-          oc new-app --template=rhpam{{ RHPAM_VERSION_ID }}-authoring \
+          oc new-app --template=rhpam{{ RHPAM_VERSION_ID }}-{{ RHPAM_ENVIRONMENT }} \
             -p APPLICATION_NAME="rhpam7" \
             -p KIE_ADMIN_USER="pamAdmin" \
             -p KIE_ADMIN_PWD="redhatpam1!" \

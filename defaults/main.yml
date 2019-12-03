@@ -5,4 +5,5 @@ OCP_PROJECT: rhpam
 IMAGE_STREAM_NAMESPACE: openshift
 RHPAM_VERSION_TAG: 7.5.0.GA
 RHPAM_VERSION_ID: 75
+RHPAM_ENVIRONMENT: trial
 PAM_SECRETS_TEMPLATE_YML: https://raw.githubusercontent.com/jboss-container-images/rhpam-7-openshift-image/{{ RHPAM_VERSION_TAG }}/example-app-secret-template.yaml
