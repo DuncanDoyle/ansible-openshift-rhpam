@@ -98,5 +98,5 @@
 - name: Disable OpenShiftStartupStrategy
   shell: "oc set env dc/rhpam7-rhpamcentr KIE_WORKBENCH_CONTROLLER_OPENSHIFT_ENABLED=false -n {{ OCP_PROJECT }}"
 
-- name: Configure KIE-Server:
+- name: Configure KIE-Server
   shell: "oc set env dc/rhpam7-kieserver KIE_SERVER_STARTUP_STRATEGY=ControllerBasedStartupStrategy KIE_SERVER_CONTROLLER_USER=contollerUser KIE_SERVER_CONTROLLER_PWD=test1234! KIE_SERVER_CONTROLLER_SERVICE=rhpam7-rhpamcentr KIE_SERVER_CONTROLLER_PROTOCOL=ws KIE_SERVER_ROUTE_NAME=insecure-rhpam7-kieserver -n {{ OCP_PROJECT }}"
