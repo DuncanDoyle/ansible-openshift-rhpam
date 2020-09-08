@@ -14,7 +14,7 @@ Role Variables
 |`IMAGE_STREAM_NAMESPACE`     | `openshift`        | Optional | Namespaces in which the RHPAM ImageStreams have been installed. |
 |`RHPAM_VERSION_TAG`          | `7.8.0.GA`         | Optional | RHPAM container image tag in registry.redhat.io. I.e. the RHPAM version to deploy. |
 |`RHPAM_ENVIRONMENT`          | `trial-ephemeral`            | Optional | RHPAM Environment type. Currently "trial-ephemeral" (default) and "authoring" have been tested. |
-|`RHPAM_VERSION_ID`           | `78`      | Optional | The version id used when selecting the RHPAM-Authoring template to test. E.g. `78` for templates of version `7.3.x`, `74` for templates of version `7.4.x`, etc. |
+|`RHPAM_VERSION_ID`           | `78`      | Optional | The version id used when selecting the RHPAM-Authoring template to test. E.g. `78` for templates of version `7.8.x`, `78` for templates of version `7.8.x`, etc. |
 
 OpenShift Version Compatibility
 ------------
