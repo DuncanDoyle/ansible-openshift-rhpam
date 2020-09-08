@@ -81,11 +81,11 @@
 
 - name: Set base param fact
   set_fact:
-    TEMPLATE_PARAMS: -p APPLICATION_NAME="rhpam7" -p KIE_ADMIN_USER="pamAdmin" -p KIE_SERVER_CONTROLLER_USER="controllerUser" -p KIE_SERVER_USER="executionUser" -p BUSINESS_CENTRAL_MAVEN_USERNAME="mavenUser" -p BUSINESS_CENTRAL_MEMORY_LIMIT="2Gi"
+    TEMPLATE_PARAMS: -p APPLICATION_NAME="rhpam7" -p KIE_ADMIN_USER="pamAdmin"  -p KIE_SERVER_USER="executionUser" -p BUSINESS_CENTRAL_MAVEN_USERNAME="mavenUser" -p BUSINESS_CENTRAL_MEMORY_LIMIT="4Gi"
 
 - name: Set additional facts for non-trial environment
   set_fact:
-    TEMPLATE_PARAMS: "{{ TEMPLATE_PARAMS }} -p KIE_ADMIN_PWD='redhatpam1' -p KIE_SERVER_CONTROLLER_PWD='test1234!' -p KIE_SERVER_PWD='test1234!' -p BUSINESS_CENTRAL_MAVEN_PASSWORD='test1234!' -p BUSINESS_CENTRAL_HTTPS_SECRET='businesscentral-app-secret' -p KIE_SERVER_HTTPS_SECRET='kieserver-app-secret'"
+    TEMPLATE_PARAMS: "{{ TEMPLATE_PARAMS }} -p KIE_ADMIN_PWD='redhatpam1' -p KIE_SERVER_PWD='test1234!' -p BUSINESS_CENTRAL_MAVEN_PASSWORD='test1234!' -p BUSINESS_CENTRAL_HTTPS_SECRET='businesscentral-app-secret' -p KIE_SERVER_HTTPS_SECRET='kieserver-app-secret'"
   when: RHPAM_ENVIRONMENT != "trial-ephemeral"
 
 - name: Create PAM7 environment
@@ -96,7 +96,7 @@
   when: rhpam_result is failed
 
 - name: Disable OpenShiftStartupStrategy
-  shell: "oc set env dc/rhpam7-rhpamcentr KIE_WORKBENCH_CONTROLLER_OPENSHIFT_ENABLED=false KIE_SERVER_CONTROLLER_PWD=test1234! -n {{ OCP_PROJECT }}"
+  shell: "oc set env dc/rhpam7-rhpamcentr KIE_WORKBENCH_CONTROLLER_OPENSHIFT_ENABLED=false -n {{ OCP_PROJECT }}"
 
 - name: Configure KIE-Server
-  shell: "oc set env dc/rhpam7-kieserver KIE_SERVER_STARTUP_STRATEGY=ControllerBasedStartupStrategy KIE_SERVER_CONTROLLER_USER=controllerUser KIE_SERVER_CONTROLLER_PWD=test1234! KIE_SERVER_CONTROLLER_SERVICE=rhpam7-rhpamcentr KIE_SERVER_CONTROLLER_PROTOCOL=ws KIE_SERVER_ROUTE_NAME=insecure-rhpam7-kieserver -n {{ OCP_PROJECT }}"
+  shell: "oc set env dc/rhpam7-kieserver KIE_SERVER_STARTUP_STRATEGY=ControllerBasedStartupStrategy  KIE_SERVER_CONTROLLER_SERVICE=rhpam7-rhpamcentr KIE_SERVER_CONTROLLER_PROTOCOL=ws KIE_SERVER_ROUTE_NAME=insecure-rhpam7-kieserver -n {{ OCP_PROJECT }}"
